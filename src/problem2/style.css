@@ -1,8 +1,59 @@
+/* Basic styling for better visibility */
+:root {
+  /* Changes the primary theme color to purple using primitives */
+  --sl-color-primary-50: rgb(255 251 213);
+  --sl-color-primary-100: rgb(254 240 96);
+  --sl-color-primary-200: rgb(246 224 5);
+  --sl-color-primary-300: rgb(228 209 5);
+  --sl-color-primary-400: rgb(206 188 4);
+  --sl-color-primary-500: rgb(177 161 3);
+  --sl-color-primary-600: rgb(146 133 3);
+  --sl-color-primary-700: rgb(120 109 2);
+  --sl-color-primary-800: rgb(99 90 2);
+  --sl-color-primary-900: rgb(70 64 1);
+  --sl-color-primary-950: rgb(43 39 1);
+}
+*:focus {
+  outline: 0 !important;
+}
 body {
+  font-family: sans-serif;
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  min-width: 360px;
-  font-family: Arial, Helvetica, sans-serif;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.container {
+  background-color: #36363b;
+  padding: 2rem;
+  border-radius: 8px;
+}
+.submit-button::part(base) {
+  background: #fde705;
+}
+
+.submit-button::part(base):hover {
+  background: #c8b91e;
+}
+
+.submit-button::part(base):disabled {
+  background: #c8b91e;
+}
+
+.submit-button::part(base):active {
+  background: #fde705;
+  opacity: 0.7;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

@@ -1,27 +1,60 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" class="sl-theme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fancy Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fancy Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/themes/dark.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/shoelace-autoloader.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-zinc-800">
+    <form class="container shadow-md max-w-lg flex flex-col gap-4">
+      <div class="py-2 max-w-fit flex justify-center items-center rounded-md">
+        <h2 class="text-2xl font-bold text-white text-[18px]">Swap</h2>
+      </div>
+      <!-- Amount to send -->
+      <section id="amount-to-send" class="bg-[#2C2C31] p-6 rounded-lg shadow-[#2C2C31] flex justify-between gap-[32px] items-center">
+        <sl-input id="amount-send-input" type="number" placeholder="0.00" label="Amount to send" class="max-w-[150px]" pill></sl-input>
+        <div class="max-w-[165px] mt-6">
+          <sl-select pill id="sendCurrency" class="max-w-fit">
+            <sl-option value="">Loading...</sl-option>
+          </sl-select>
+        </div>
+      </section>
 
-  <!-- You may add more stuff here -->
-  <link href="style.css" rel="stylesheet" />
-</head>
+      <!-- Swap icon -->
+      <div class="flex justify-center items-center w-full my-[-8px]">
+        <div class="bg-[#2C2C31] w-[32px] h-[32px] rounded-full flex justify-center items-center">
+          <sl-icon name="arrow-down"></sl-icon>
+        </div>
+      </div>
 
-<body>
+      <!-- Amount to receive -->
+      <section id="amount-to-receive-section" class="bg-[#2C2C31] p-6 rounded-lg shadow-[#2C2C31] flex justify-between gap-[32px] items-center">
+        <sl-input id="amount-receive-input" readonly placeholder="0.00" label="Amount to receive" class="max-w-[150px]" pill></sl-input>
+        <div class="max-w-[165px] mt-6">
+          <sl-select pill id="receiveCurrency" class="max-w-fit">
+            <sl-option value="">Loading...</sl-option>
+          </sl-select>
+        </div>
+      </section>
 
-  <!-- You may reorganise the whole HTML, as long as your form achieves the same effect. -->
-  <form onsubmit="return !1">
-    <h5>Swap</h5>
-    <label for="input-amount">Amount to send</label>
-    <input id="input-amount" />
+      <!-- Rate -->
+      <section id="rate" class="p-2 flex justify-center gap-[8px] items-center invisible">
+        <span>1</span>
+        <sl-icon id="rateSendIcon" src=""></sl-icon>
+        <span>=</span>
+        <span id="rateValue"></span>
+        <sl-icon id="rateReceiveIcon" src=""></sl-icon>
+      </section>
 
-    <label for="output-amount">Amount to receive</label>
-    <input id="output-amount" />
+      <sl-button id="swapButton" variant="primary" class="submit-button color-black text-[14px] rounded w-full bg-[#fde705]">CONFIRM SWAP</sl-button>
+    </form>
 
-    <button>CONFIRM SWAP</button>
-  </form>
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>
