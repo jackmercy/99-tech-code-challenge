@@ -10,7 +10,7 @@ You can either provide a link to an online repository, attach the solution in yo
 We're cool as long as we can view your solution without any pain.
 
 
-# Interviewer information
+# Interviewee information
 
 - Name: Khoi Cao Minh
 - Email: khoicm.hcm@gmail.com
