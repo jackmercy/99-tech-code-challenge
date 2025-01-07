@@ -65,6 +65,50 @@ input[type=number] {
   grid-template-columns: 1fr 32px 1fr;
 }
 
+.amount-section {
+  position: relative;
+  display: flex;
+  gap: 24px;
+  background-color: #2C2C31;
+  padding: 24px 16px;
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.amount-section > .title {
+  position: absolute;
+  top: 24px;
+  left: 30px;
+  color: #fff;
+  font-size: 16px;
+}
+.amount-section > .amount-input-wrapper {
+  max-width: 165px;
+  margin-top: 38px;
+}
+
+.amount-input::part(base) {
+  --sl-input-border-color: transparent ;
+  --sl-input-focus-ring-color: transparent;
+  border-radius: 8px !important;
+}
+
+.amount-input.error::part(base) {
+  border-color: #FF5F5F !important;
+  --sl-input-border-color: #FF5F5F !important;
+}
+
+.currency-select::part(combobox) {
+  --sl-input-border-color: transparent;
+  --sl-input-focus-ring-color: transparent;
+  border-radius: 8px !important;
+}
+
+.amount-section > .currency-selection {
+  max-width: 165px !important;
+}
+
 @media screen and (max-width: 576px) {
   .content-grid {
     grid-template-columns: 1fr;
@@ -76,25 +120,30 @@ input[type=number] {
 
 @media screen and (max-width: 575px) {
   .container {
-    max-width: 320px !important;
+    max-width: 100% !important;
+    min-width: 430px !important;
+  }
+  .amount-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+  }
+  .amount-section > .currency-selection {
+    margin-top: 30px;
+  }
+  .amount-section > .amount-input-wrapper {
+    margin-top: 30px;
+  }
+  .amount-section > .title {
+    left: 16px;
+    top: 16px;
+  }
+  #amount-send-input-error {
+    bottom: -15px !important;
   }
 }
 
-/* sl-input .form-control .input--standard {
-  border: none !important;
-} */
 
-.amount-input::part(base) {
-  --sl-input-border-color: transparent ;
-  --sl-input-focus-ring-color: transparent;
-}
-
-.amount-input.error::part(base) {
-  border-color: #FF5F5F !important;
-  --sl-input-border-color: #FF5F5F !important;
-}
-
-.currency-select::part(combobox) {
-  --sl-input-border-color: transparent;
-  --sl-input-focus-ring-color: transparent;
-}
