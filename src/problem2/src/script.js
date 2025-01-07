@@ -1,7 +1,10 @@
 // DOM elements
 const swapButton = document.getElementById('swapButton');
+const successAlert = document.getElementById('successAlert');
+const errorAlert = document.getElementById('errorAlert');
 const sendSelect = document.getElementById('sendCurrency');
 const sendInput = document.getElementById('amount-send-input');
+const sendInputError = document.getElementById('amount-send-input-error');
 const receiveSelect = document.getElementById('receiveCurrency');
 const sendIcon = document.getElementById('sendIcon');
 const receiveIcon = document.getElementById('receiveIcon');
@@ -10,7 +13,8 @@ const rateSendIcon = document.getElementById('rateSendIcon');
 const rateReceiveIcon = document.getElementById('rateReceiveIcon');
 let priceData = [];
 // readonly
-const apiUrl = 'https://interview.switcheo.com/prices.json';
+const DECIMAL_PLACES = 5;
+const PRICE_API_URL = 'https://interview.switcheo.com/prices.json';
 const baseIconUrl = 'https://raw.githubusercontent.com/Switcheo/token-icons/302e89e1460bfa1fd47de49fb0baf9ddc74fc190/tokens'; // +[icon_uppercase].svg;
 const createTokenIcon = (token) => {
   return `${baseIconUrl}/${token}.svg`;
@@ -21,21 +25,26 @@ const extractTokenIconValue = (url) => {
   return token;
 }
 
-const roundToNDecimalPlaces = (value, n = 5) => {
+const roundToNDecimalPlaces = (value, n = DECIMAL_PLACES) => {
   return Math.round(value * Math.pow(10, n)) / Math.pow(10, n);
 }
 // states
 let currentSendIcon = '';
 let currentReceiveIcon = '';
+let isSendInputTouched = false;
+
+const createErrorAlert = (title = 'Failed to swap', message = 'Please try again after some time.') => {
+  return `<sl-icon slot="icon" name="exclamation-octagon"></sl-icon><strong>${title}</strong><br />${message}`;
+};
 
 function updateFormState() {
   swapButton.disabled = !sendSelect.value || !receiveSelect.value || !sendInput.value;
-  if (!sendInput.value) {
-    sendInput.classList.add('border-red-500');
-    console.log('invalid');
+  if (!sendInput.value && isSendInputTouched) {
+    sendInput.classList.add('error');
+    sendInputError.classList.remove('hidden');
   } else {
-    sendInput.classList.remove('border-red-500');
-    console.log('valid');
+    sendInput.classList.remove('error');
+    sendInputError.classList.add('hidden');
   }
   currentSendIcon = createTokenIcon(sendSelect.value);
   document.getElementById('sendIcon').src = currentSendIcon;
@@ -46,7 +55,6 @@ function updateFormState() {
 
   if (!swapButton.disabled) {
     rateSection.classList.remove('invisible');
-    // TODO: calculate the rate
     const rateValue = document.getElementById('rateValue');
     rateValue.textContent = '0.00';
     const currentSendToken = extractTokenIconValue(currentSendIcon);
@@ -57,7 +65,7 @@ function updateFormState() {
     rateValue.textContent = roundToNDecimalPlaces(rate);
     // update amount to receive
     const amountToReceive = sendInput.value * rate;
-    // round to 4 decimal places
+    // round to 5 decimal places
     document.getElementById('amount-receive-input').value = roundToNDecimalPlaces(amountToReceive);
   } else {
     rateSection.classList.add('invisible');
@@ -66,6 +74,32 @@ function updateFormState() {
 sendSelect.addEventListener('sl-change', updateFormState);
 receiveSelect.addEventListener('sl-change', updateFormState);
 sendInput.addEventListener('sl-input', updateFormState);
+sendInput.addEventListener('click', () => {
+  // not display error on initial state (not touched)
+  isSendInputTouched = true;
+});
+
+swapButton.addEventListener('click', () => {
+  swapButton.disabled = true;
+  swapButton.setAttribute('loading', true);
+  const seed = Math.floor(Math.random() * 100); // Random number between 0 and 100
+  setTimeout(() => {
+    swapButton.disabled = false;
+    swapButton.removeAttribute('loading');
+    // if seed is even, show success alert -> Simulate http success/error
+    if (seed % 2 === 0) {
+      successAlert.open = true;
+    } else {
+      errorAlert.innerHTML = createErrorAlert();
+      errorAlert.open = true;
+    }
+  }, 1000);
+
+  setTimeout(() => {
+    successAlert.open = false;
+    errorAlert.open = false;
+  }, 2500);
+});
 
 function updatePriceData(data) {
   const uniqueCurrencies = [];
@@ -80,7 +114,7 @@ function updatePriceData(data) {
   priceData = structuredClone(uniqueCurrencies);
 }
 
-fetch(apiUrl)
+fetch(PRICE_API_URL)
   .then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -109,8 +143,11 @@ fetch(apiUrl)
     updateFormState();
   })
   .catch(error => {
-    console.error('Fetch error:', error);
-    alert('Error loading data');
+    errorAlert.innerHTML = createErrorAlert('Error loading data', 'Please try again after some time.');
+    errorAlert.open = true;
+    setTimeout(() => {
+      errorAlert.open = false;
+    }, 2500);
     sendSelect.innerHTML = '<sl-option value="">Error loading data</sl-option>';
     receiveSelect.innerHTML = '<sl-option value="">Error loading data</sl-option>';
     swapButton.disabled = true; //Disable button on error

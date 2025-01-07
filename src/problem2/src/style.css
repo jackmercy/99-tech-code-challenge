@@ -29,6 +29,7 @@ body {
   background-color: #36363b;
   padding: 2rem;
   border-radius: 8px;
+  max-width: 576px !important;
 }
 .submit-button::part(base) {
   background: #fde705;
@@ -56,4 +57,44 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.content-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 32px 1fr;
+}
+
+@media screen and (max-width: 576px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  #swapIcon {
+    rotate: 90deg;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .container {
+    max-width: 320px !important;
+  }
+}
+
+/* sl-input .form-control .input--standard {
+  border: none !important;
+} */
+
+.amount-input::part(base) {
+  --sl-input-border-color: transparent ;
+  --sl-input-focus-ring-color: transparent;
+}
+
+.amount-input.error::part(base) {
+  border-color: #FF5F5F !important;
+  --sl-input-border-color: #FF5F5F !important;
+}
+
+.currency-select::part(combobox) {
+  --sl-input-border-color: transparent;
+  --sl-input-focus-ring-color: transparent;
 }
